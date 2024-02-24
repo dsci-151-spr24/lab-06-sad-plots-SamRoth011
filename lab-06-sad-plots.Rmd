@@ -142,6 +142,7 @@ staff_long %>%
   geom_line() +
   labs(
     title = "Faculty Types by Year (1975-2011)",
+    subtitle = "Part Time Faculty Increase",
     x = "",
     y = "") +
   theme(legend.title = element_blank()) +
@@ -156,6 +157,8 @@ staff_long %>%
     What changes would you propose making to this plot to tell this story and why.
 
 3.  Implement the changes you proposed in the previous exercise.
+
+***Made changes to the previous code.***
 
 🧶 ✅ ⬆️ Knit, *commit, and push your changes to GitHub with an appropriate commit message. Make sure to commit and push all changed files so that your Git pane is cleared up afterwards.*
 
@@ -177,11 +180,32 @@ knitr::include_graphics("img/fisheries.png")
 
 Load the data.
 
-```{r load-data-fisheries, eval = FALSE}
-fisheries <- read_csv("data/fisheries.csv")
+```{r load-data-fisheries}
+fisheries <- read_csv("data/fisheries.csv", show_col_types = FALSE)
 ```
 
 5.  Create a new data visualisation for these data that implements the improvements you proposed in the previous exercise (or many of them as you can).
+
+```{r}
+
+fisheries_plot <- fisheries %>%
+  filter(total >= 800000) %>%
+  mutate(country = fct_reorder(country, aquaculture, min)) %>%
+  select(-total) %>%
+  pivot_longer(cols = -country, names_to = "type")
+
+  ggplot(fisheries_plot, aes(y = fct_infreq(country), x = value, fill = type)) +
+    geom_bar(stat = "identity", position = "fill") +
+    scale_fill_manual(values=c("red", "#3182bd")) +
+    theme(legend.title = element_blank()) +
+    theme(legend.position = "top") +
+    labs(
+      title = "Fishing by Country") +
+    xlab("Proportion") +
+    ylab("")
+    
+
+```
 
 🧶 ✅ ⬆️ Knit, *commit, and push your changes to GitHub with an appropriate commit message. Make sure to commit and push all changed files so that your Git pane is cleared up afterwards and review the md document on GitHub to make sure you're happy with the final state of your work.*
 
